@@ -1,10 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useForm from '../../hooks/form';
-
+import { createStyles, Grid } from '@mantine/core';
 import { v4 as uuid } from 'uuid';
+import { SettingsContext } from '../../Context/Settings';
+import List from '../List';
+import './todo.css'
+
+const useStyles = createStyles((theme) => ({
+  h1: {
+    backgroundColor: theme.colors.gray[8],
+    color: theme.colors.gray[0],
+    width: '80%',
+    margin: 'auto',
+    fontSize: theme.fontSizes.lg,
+    padding: theme.spacing.md,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+  }
+}));
 
 const Todo = () => {
-
+  const { classes } = useStyles();
   const [defaultValues] = useState({
     difficulty: 4,
   });
