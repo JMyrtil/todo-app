@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { createStyles, Grid, Switch, NumberInput } from '@mantine/core';
 import { SettingsContext } from '../../Context/Settings';
 import './settings.css'

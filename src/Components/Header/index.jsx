@@ -1,5 +1,6 @@
-import { createStyles, Header, Navbar, Text } from '@mantine/core';
-import { Link } from 'react-router-dom'
+import { createStyles, Header, Navbar} from '@mantine/core';
+import { Link } from 'react-router-dom';
+import Login from '../Login';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -21,6 +22,7 @@ const HeaderComponent = () => {
       <Navbar className={classes.navbar}>
         <Link className={classes.link} to="/">Todo</Link>
         <Link className={classes.link} to="/settings">Settings</Link>
+        <Login />
       </Navbar>
     </Header>
   )
