@@ -7,7 +7,7 @@ import { If, Else, Then } from 'react-if';
 import { LoginContext } from '../../Context/Auth';
 
 const List = ({ list, toggleComplete, deleteItem }) => {
-  const { displayCount, showComplete, sort } = useContext(SettingsContext);
+  const { displayCount, showComplete } = useContext(SettingsContext);
   const [activePage, setPage] = useState(1);
   const { loggedIn, can } = useContext(LoginContext);
 
@@ -38,7 +38,7 @@ const List = ({ list, toggleComplete, deleteItem }) => {
             </If>
             <Text size="sm" className="list-assignee">{item.assignee}</Text>
             <Auth capability="delete">
-              <Button variant="subtle" className="list-close-button" onClick={() => toggleComplete(item.id)}>X</Button>
+              <Button variant="subtle" className="list-close-button" onClick={() => deleteItem(item.id)}>X</Button>
             </Auth>
           </div>
           <div className="list-body">

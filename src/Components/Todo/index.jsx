@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import useForm from '../../hooks/form';
 import { createStyles, Grid } from '@mantine/core';
-import { v4 as uuid } from 'uuid';
 import List from '../List';
 import './todo.css'
 import Auth from '../Auth';
+import axios from 'axios';
 
 const useStyles = createStyles((theme) => ({
   h1: {
@@ -29,28 +29,41 @@ const Todo = () => {
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
   function addItem(item) {
-    item.id = uuid();
+    axios({
+      url: 'https://api-js401.herokuapp.com/api/v1/todo',
+      method: 'post',
+      data: item
+    });
     item.complete = false;
     console.log(item);
     setList([...list, item]);
   }
 
+
+
   function deleteItem(id) {
+    axios.delete(`https://api-js401.herokuapp.com/api/v1/todo/${id}`);
     const items = list.filter(item => item.id !== id);
     setList(items);
   }
 
   function toggleComplete(id) {
+    const item = list.filter(i => i._id === id)[0] || {};
+    if (item._id) {
+      const url = `https://api-js401.herokuapp.com/api/v1/todo/${id}`;
+      const method = 'put';
+      const data = { complete: !item.complete };
+      axios({ url, method, data });
+      const items = list.map(item => {
+        if (item.id === id) {
+          item.complete = !item.complete;
+        }
+        return item;
+      });
 
-    const items = list.map(item => {
-      if (item.id === id) {
-        item.complete = !item.complete;
-      }
-      return item;
-    });
+      setList(items);
 
-    setList(items);
-
+    }
   }
 
   useEffect(() => {
@@ -61,6 +74,14 @@ const Todo = () => {
     // disable code used to avoid linter warning 
     // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [list]);
+
+  useEffect(() => {
+    const getData = async () => {
+      let response = await axios.get('https://api-js401.herokuapp.com/api/v1/todo');
+      setList(response.data.results);
+    };
+    getData();
+  }, []);
 
   return (
     <>
@@ -93,16 +114,11 @@ const Todo = () => {
           </label>
         </form>
       </Auth>
-
-      {list.map(item => (
-        <div key={item.id}>
-          <p>{item.text}</p>
-          <p><small>Assigned to: {item.assignee}</small></p>
-          <p><small>Difficulty: {item.difficulty}</small></p>
-          <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
-          <hr />
-        </div>
-      ))}
+      <Grid>
+        <Grid.Col xs={12} sm={8}>
+          <List list={list} toggleComplete={toggleComplete} deleteItem={deleteItem} />
+        </Grid.Col>
+      </Grid>
 
     </>
   );

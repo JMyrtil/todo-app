@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { createStyles, Grid, Switch, NumberInput } from '@mantine/core';
 import { SettingsContext } from '../../Context/Settings';
 import './settings.css'
+import { When } from 'react-if';
 
 const useStyles = createStyles((theme) => ({
   h1: {
@@ -17,6 +18,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Settings = () => {
+  const [show, setShow] = useState('false')
   const { classes } = useStyles();
   const {
     displayCount,
@@ -42,27 +44,27 @@ const Settings = () => {
 
             <h2 className="form-h2">Update Settings</h2>
 
-            <Switch 
-              className="switch" 
-              label="Show Completed ToDos" 
-              checked={showComplete} 
+            <Switch
+              className="switch"
+              label="Show Completed ToDos"
+              checked={showComplete}
               onChange={(e) => setShowComplete(e.currentTarget.checked)}
             />
-            
-            <NumberInput 
-            className="number" 
-            defaultValue={3} 
-            label="Items Per Page"
-            value={displayCount}
-            onChange={(value) => setDisplayCount(parseInt(value))} />
+
+            <NumberInput
+              className="number"
+              defaultValue={3}
+              label="Items Per Page"
+              value={displayCount}
+              onChange={(value) => setDisplayCount(parseInt(value))} />
 
             <label className="sort">
               <span>Sort Keyword</span>
-              <input 
-                name="sort" 
-                type="text" 
-                value={sort} 
-                onChange={(e) => setSort(e.target.value)} 
+              <input
+                name="sort"
+                type="text"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
               />
             </label>
 
@@ -73,12 +75,14 @@ const Settings = () => {
         </Grid.Col>
 
         <Grid.Col xs={12} sm={8}>
-          <div className="updated-settings">
-            <h2 className="form-h2">Updated Settings</h2>
-            <p>{showComplete ? 'Show Completed ToDos' : 'Hide Completed ToDos'}</p>
-            <p>{`Items Per Page: ${displayCount}`}</p>
-            <p>{`Sort Keyword: ${sort}`}</p>
-          </div>
+          <When condition={show}>
+            <div className="updated-settings">
+              <h2 className="form-h2">Updated Settings</h2>
+              <p>{showComplete ? 'Show Completed ToDos' : 'Hide Completed ToDos'}</p>
+              <p>{`Items Per Page: ${displayCount}`}</p>
+              <p>{`Sort Keyword: ${sort}`}</p>
+            </div>
+          </When>
         </Grid.Col>
 
       </Grid>
